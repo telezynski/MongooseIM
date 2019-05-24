@@ -156,14 +156,13 @@ stop_worker(Proc) ->
 
 
 -spec archive_message(_, Host :: jid:server(), MessID :: mod_mam:message_id(),
-                      ArcID :: mod_mam:archive_id(), LocJID :: jid:jid(),
-                      RemJID :: jid:jid(), SrcJID :: jid:jid(), Dir :: atom(),
+                      RoomID :: mod_mam:archive_id(), BareSenderJID :: jid:jid(),
+                      RemJID :: jid:jid(), UserRoomJID :: jid:jid(), Dir :: atom(),
                       Packet :: packet()) -> ok | {error, timeout}.
-archive_message(_Result, Host,
-                MessID, ArcID, LocJID, RemJID, SrcJID, Dir, Packet) ->
-    Row = mod_mam_muc_rdbms_arch:prepare_message(Host,
-                                                MessID, ArcID, LocJID, RemJID, SrcJID, Dir, Packet),
-    Worker = select_worker(Host, ArcID),
+archive_message(_Result, Host, MessID, RoomID, BareSenderJID, _RemJID, UserRoomJID, _Dir, Packet) ->
+    Row = mod_mam_muc_rdbms_arch:prepare_message(Host, MessID, RoomID,
+                                                 BareSenderJID, UserRoomJID, Packet),
+    Worker = select_worker(Host, RoomID),
     WorkerPid = whereis(Worker),
     %% Send synchronously if queue length is too long.
     case is_overloaded(WorkerPid) of

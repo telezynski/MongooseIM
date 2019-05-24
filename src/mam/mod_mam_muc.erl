@@ -220,8 +220,9 @@ archive_room_packet(Packet, FromNick, FromJID=#jid{}, RoomJID=#jid{}, Role, Affi
         true ->
             MessID = generate_message_id(),
             Packet1 = replace_x_user_element(FromJID, Role, Affiliation, Packet),
+            BareSenderJID = jid:to_bare(FromJID),
             Result = archive_message(Host, MessID, ArcID,
-                                     RoomJID, SrcJID, SrcJID, incoming, Packet1),
+                                     RoomJID, BareSenderJID, SrcJID, incoming, Packet1),
             %% Packet2 goes to archive, Packet to other users
             case Result of
                 ok ->
@@ -517,12 +518,12 @@ lookup_messages_without_policy_violation_check(Host, #{search_text := SearchText
 
 
 -spec archive_message(jid:server(), MessId :: mod_mam:message_id(),
-                      ArcId :: mod_mam:archive_id(), LocJID :: jid:jid(),
+                      ArcId :: mod_mam:archive_id(), BareSenderJID :: jid:jid(),
                       RemJID :: jid:jid(), SrcJID :: jid:jid(), Dir :: 'incoming',
                       packet()) -> any().
-archive_message(Host, MessID, ArcID, LocJID, RemJID, SrcJID, Dir, Packet) ->
+archive_message(Host, MessID, ArcID, BareSenderJID, RemJID, SrcJID, Dir, Packet) ->
     ejabberd_hooks:run_fold(mam_muc_archive_message, Host, ok,
-                            [Host, MessID, ArcID, LocJID, RemJID, SrcJID, Dir, Packet]).
+                            [Host, MessID, ArcID, BareSenderJID, RemJID, SrcJID, Dir, Packet]).
 
 %% ----------------------------------------------------------------------
 %% Helpers
