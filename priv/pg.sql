@@ -240,7 +240,6 @@ CREATE TABLE mam_muc_message(
   -- A server-assigned UID that MUST be unique within the archive.
   id BIGINT NOT NULL,
   room_id INT NOT NULL,
-  sender_id INT NOT NULL,
   -- A nick of the message's originator
   nick_name varchar(250) NOT NULL,
   -- Term-encoded message packet
@@ -248,6 +247,8 @@ CREATE TABLE mam_muc_message(
   search_body text,
   PRIMARY KEY (room_id, id)
 );
+
+ALTER TABLE mam_muc_message ADD COLUMN sender_id INT;
 
 CREATE INDEX i_mam_muc_message_sender_id ON mam_muc_message USING BTREE (sender_id);
 
