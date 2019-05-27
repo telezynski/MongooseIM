@@ -154,7 +154,7 @@ archive_message(_Result, Host, MessID, RoomID, BareSenderJID = #jid{},
 
 -spec prepare_message(Host :: jid:server(), MessID :: mod_mam:message_id(),
                       RoomID :: mod_mam:archive_id(), BareSenderJID :: jid:jid(),
-                      UserRoomJID :: jid:jid(), Packet :: packet()) -> list().
+                      UserRoomJID :: jid:jid(), Packet :: packet()) -> [binary() | integer()].
 prepare_message(Host, MessID, RoomID, BareSenderJID, #jid{ lresource = FromNick }, Packet) ->
     Data = packet_to_stored_binary(Host, Packet),
     TextBody = mod_mam_utils:packet_to_search_body(mod_mam_muc, Host, Packet),
