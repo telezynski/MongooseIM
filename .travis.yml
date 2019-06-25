@@ -75,6 +75,7 @@ services:
 branches:
         only:
                 - deps_upgrade_erl_22
+                - deps_upgrade_erl_21
                 - master
                 - stable
                 - /^rel\-\d+\.\d+$/
@@ -83,7 +84,7 @@ branches:
                 - gdpr-remove-vcard
 
 otp_release:
-        - 22.0
+        - 21.3
 
 env:
   global:
@@ -103,7 +104,7 @@ env:
 
 matrix:
   include:
-    - otp_release: 22.0
+    - otp_release: 21.3
       env: PRESET=dialyzer_only
            SKIP_RELEASE=1 SKIP_BUILD_TESTS=1 SKIP_COV=1 SKIP_REPORT_UPLOAD=1
     - otp_release: 21.3
